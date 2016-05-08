@@ -1,7 +1,0 @@
-#!/bin/bash
-mkdir ~/kodi-openbox
-mkdir ~/kodi-openbox/tmp
-echo "waiting for kodi to close"
-kpid=$(pgrep kodi.bin)
-kill -9 $kpid
-eval "$@"
