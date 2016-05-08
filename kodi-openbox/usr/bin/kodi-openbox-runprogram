@@ -1,0 +1,3 @@
+#!/bin/bash
+kodi-openbox-runprogram-bg $@ &
+disown

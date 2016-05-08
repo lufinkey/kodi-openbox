@@ -1,0 +1,9 @@
+#!/bin/bash
+mkdir -p ~/.kodi-openbox
+mkdir -p ~/.kodi-openbox/tmp
+echo $$ > ~/.kodi-openbox/tmp/program-running
+echo "waiting for kodi to close"
+kpid=$(pgrep kodi.bin)
+kill -3 $kpid
+eval "$@"
+exit $?

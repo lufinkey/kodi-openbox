@@ -1,0 +1,42 @@
+#!/bin/bash
+mkdir -p ~/.kodi-openbox
+mkdir -p ~/.kodi-openbox/tmp
+if [ ! -f ~/.kodi-openbox/onstart.sh ]
+then
+	cat > ~/.kodi-openbox/onstart.sh << EOF
+#!/bin/bash
+# Put some code here to run when a kodi-openbox session successfully starts
+EOF
+chmod +x ~/.kodi-openbox/onstart.sh
+
+fi
+(
+flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time (sorry)" && exit -2)
+
+openbox-session &
+oppid=$!
+disown
+rm -rf ~/.kodi-openbox/tmp/program-running
+if [ -a ~/.kodi-openbox/onstart.sh ]
+then
+	~/.kodi-openbox/onstart.sh
+fi
+while true; do
+	/usr/lib/kodi/kodi.bin
+	lpid=$(cat ~/.kodi-openbox/tmp/program-running)
+	rm -rf ~/.kodi-openbox/tmp/program-running
+	if [ -n "$lpid" ]
+	then
+		while [ -e /proc/$lpid ]; do
+			sleep 1
+		done
+	else
+		break
+	fi
+done
+openbox --exit
+wait $oppid
+
+) 200>~/.kodi-openbox/tmp/lock
+rm -rf ~/.kodi-openbox/tmp
+mkdir -p ~/.kodi-openbox/tmp

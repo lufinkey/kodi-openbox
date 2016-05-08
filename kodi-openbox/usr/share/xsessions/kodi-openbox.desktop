@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Kodi Openbox
+Comment=This session will start Kodi media center on top of an Openbox session
+Exec=/usr/bin/kodi-openbox-session
+Type=Application
