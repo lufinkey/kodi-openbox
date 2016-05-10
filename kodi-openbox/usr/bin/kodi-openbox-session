@@ -1,13 +1,13 @@
 #!/bin/bash
 mkdir -p ~/.kodi-openbox
 mkdir -p ~/.kodi-openbox/tmp
-if [ ! -f ~/.kodi-openbox/onstart.sh ]
+if [ ! -f ~/.kodi-openbox/onstart ]
 then
-	cat > ~/.kodi-openbox/onstart.sh << EOF
+	cat > ~/.kodi-openbox/onstart << EOF
 #!/bin/bash
 # Put some code here to run when a kodi-openbox session successfully starts
 EOF
-chmod +x ~/.kodi-openbox/onstart.sh
+	chmod +x ~/.kodi-openbox/onstart
 
 fi
 (
@@ -17,9 +17,9 @@ openbox-session &
 oppid=$!
 disown
 rm -rf ~/.kodi-openbox/tmp/program-running
-if [ -a ~/.kodi-openbox/onstart.sh ]
+if [ -a ~/.kodi-openbox/onstart ]
 then
-	~/.kodi-openbox/onstart.sh
+	~/.kodi-openbox/onstart
 fi
 while true; do
 	/usr/lib/kodi/kodi.bin
