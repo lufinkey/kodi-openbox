@@ -1,6 +1,8 @@
 #!/bin/bash
+
 mkdir -p ~/.kodi-openbox
 mkdir -p ~/.kodi-openbox/tmp
+
 if [ ! -f ~/.kodi-openbox/onstart ]
 then
 	cat > ~/.kodi-openbox/onstart << EOF
@@ -8,35 +10,50 @@ then
 # Put some code here to run when a kodi-openbox session successfully starts
 EOF
 	chmod +x ~/.kodi-openbox/onstart
-
 fi
+
 (
-flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time (sorry)" && exit -2)
+	flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time (sorry)" && exit -2)
 
-openbox-session &
-oppid=$!
-disown
-rm -rf ~/.kodi-openbox/tmp/program-running
-if [ -a ~/.kodi-openbox/onstart ]
-then
-	~/.kodi-openbox/onstart
-fi
-while true; do
-	/usr/lib/kodi/kodi.bin
-	lpid=$(cat ~/.kodi-openbox/tmp/program-running)
+	openbox-session &
+	oppid=$!
+	disown
 	rm -rf ~/.kodi-openbox/tmp/program-running
-	if [ -n "$lpid" ]
+	if [ -a ~/.kodi-openbox/onstart ]
 	then
-		while [ -e /proc/$lpid ]; do
-			sleep 1
-		done
-	else
-		break
+		~/.kodi-openbox/onstart
 	fi
-done
-openbox --exit
-wait $oppid
-
+	while true; do
+		/usr/lib/kodi/kodi.bin
+		lpid=$(cat ~/.kodi-openbox/tmp/program-running)
+		rm -rf ~/.kodi-openbox/tmp/program-running
+		if [ -n "$lpid" ]
+		then
+			while [ -e /proc/$lpid ]; do
+				sleep 1
+			done
+		else
+			break
+		fi
+	done
+	openbox --exit
+	wait $oppid
 ) 200>~/.kodi-openbox/tmp/lock
+
 rm -rf ~/.kodi-openbox/tmp
 mkdir -p ~/.kodi-openbox/tmp
+
+
+if [ ! -f ~/.kodi-openbox/onfinish ]
+then
+	cat > ~/.kodi-openbox/onfinish << EOF
+#!/bin/bash
+# Put some code here for when a kodi-openbox session finishes
+EOF
+	chmod +x ~/.kodi-openbox/onfinish
+fi
+
+if [ -a ~/.kodi-openbox/onfinish ]
+then
+	~/.kodi-openbox/onfinish
+fi
