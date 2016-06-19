@@ -48,7 +48,7 @@ if [ ! -f ~/.kodi-openbox/onfinish ]
 then
 	cat > ~/.kodi-openbox/onfinish << EOF
 #!/bin/bash
-# Put some code here for when a kodi-openbox session finishes
+# Put some code here to run when a kodi-openbox session finishes
 EOF
 	chmod +x ~/.kodi-openbox/onfinish
 fi
