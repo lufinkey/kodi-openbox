@@ -3,6 +3,27 @@
 mkdir -p ~/.kodi-openbox
 mkdir -p ~/.kodi-openbox/tmp
 
+ending=false
+
+function die
+{
+	if $ending
+	then
+		return;
+	fi
+	ending=true
+	echo "Caught signal $1"	
+	if [ -a ~/.kodi-openbox/onkill ]
+	then
+		echo "running onkill script"
+		~/.kodi-openbox/onkill "$1"
+	fi
+	exit 0
+}
+
+trap 'die "SIGINT"' SIGINT
+trap 'die "SIGQUIT"' SIGQUIT
+
 if [ ! -f ~/.kodi-openbox/onstart ]
 then
 	cat > ~/.kodi-openbox/onstart << EOF
@@ -12,12 +33,30 @@ EOF
 	chmod +x ~/.kodi-openbox/onstart
 fi
 
+if [ ! -f ~/.kodi-openbox/onfinish ]
+then
+	cat > ~/.kodi-openbox/onfinish << EOF
+#!/bin/bash
+# Put some code here to run when a kodi-openbox session ends
+EOF
+	chmod +x ~/.kodi-openbox/onfinish
+fi
+
+if [ ! -f ~/.kodi-openbox/onkill ]
+then
+	cat > ~/.kodi-openbox/onkill << EOF
+#!/bin/bash
+# Put some code here to run when a kodi-openbox session is sent a SIGINT or SIGQUIT
+EOF
+	chmod +x ~/.kodi-openbox/onkill
+fi
+
 (
-	flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time (sorry)" && exit -2)
+	flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time" && exit -2)
 
 	openbox-session &
 	oppid=$!
-	disown
+	bg
 	rm -rf ~/.kodi-openbox/tmp/program-running
 	if [ -a ~/.kodi-openbox/onstart ]
 	then
@@ -36,22 +75,13 @@ fi
 			break
 		fi
 	done
+	ending=true
 	openbox --exit
 	wait $oppid
 ) 200>~/.kodi-openbox/tmp/lock
 
 rm -rf ~/.kodi-openbox/tmp
 mkdir -p ~/.kodi-openbox/tmp
-
-
-if [ ! -f ~/.kodi-openbox/onfinish ]
-then
-	cat > ~/.kodi-openbox/onfinish << EOF
-#!/bin/bash
-# Put some code here to run when a kodi-openbox session finishes
-EOF
-	chmod +x ~/.kodi-openbox/onfinish
-fi
 
 if [ -a ~/.kodi-openbox/onfinish ]
 then
