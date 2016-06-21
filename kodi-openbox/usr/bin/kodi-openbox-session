@@ -3,9 +3,11 @@
 mkdir -p ~/.kodi-openbox
 mkdir -p ~/.kodi-openbox/tmp
 
+display=$(echo "${DISPLAY}" | tr ':' '_')
+
 ending=false
 
-function die
+function onquit
 {
 	if $ending
 	then
@@ -18,11 +20,12 @@ function die
 		echo "running onkill script"
 		~/.kodi-openbox/onkill "$1"
 	fi
+	if [ -n "$kpid" ]
+	then
+		rm -f ~/.kodi-openbox/tmp/session-pid.$display
+	fi
 	exit 0
 }
-
-trap 'die "SIGINT"' SIGINT
-trap 'die "SIGQUIT"' SIGQUIT
 
 if [ ! -f ~/.kodi-openbox/onstart ]
 then
@@ -52,20 +55,29 @@ EOF
 fi
 
 (
-	flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time" && exit -2)
+	flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time on a given display" && exit -2)
+
+	trap 'onquit "SIGINT"' SIGINT
+	trap 'onquit "SIGQUIT"' SIGQUIT
 
 	openbox-session &
 	oppid=$!
 	bg
-	rm -rf ~/.kodi-openbox/tmp/program-running
+	rm -f ~/.kodi-openbox/tmp/program-running.$display
 	if [ -a ~/.kodi-openbox/onstart ]
 	then
 		~/.kodi-openbox/onstart
 	fi
-	while true; do
-		/usr/lib/kodi/kodi.bin
-		lpid=$(cat ~/.kodi-openbox/tmp/program-running)
-		rm -rf ~/.kodi-openbox/tmp/program-running
+	while ps -p $oppid > /dev/null
+	do
+		/usr/lib/kodi/kodi.bin &
+		kpid=$!
+		echo "$kpid" > ~/.kodi-openbox/tmp/session-pid.$display
+		wait $kpid
+		rm -f ~/.kodi-openbox/tmp/session-pid.$display
+
+		lpid=$(cat ~/.kodi-openbox/tmp/program-running.$display)
+		rm -f ~/.kodi-openbox/tmp/program-running.$display
 		if [ -n "$lpid" ]
 		then
 			while [ -e /proc/$lpid ]; do
@@ -78,12 +90,13 @@ fi
 	ending=true
 	openbox --exit
 	wait $oppid
-) 200>~/.kodi-openbox/tmp/lock
+) 200>~/.kodi-openbox/tmp/displaylock.$display
 
-rm -rf ~/.kodi-openbox/tmp
-mkdir -p ~/.kodi-openbox/tmp
+rm -f ~/.kodi-openbox/tmp/program-running.$display
+rm -f ~/.kodi-openbox/tmp/displaylock.$display
 
 if [ -a ~/.kodi-openbox/onfinish ]
 then
 	~/.kodi-openbox/onfinish
 fi
+
