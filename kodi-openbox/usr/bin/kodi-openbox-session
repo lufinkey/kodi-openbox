@@ -89,6 +89,8 @@ fi
 			else
 				break
 			fi
+		else
+			break
 		fi
 	done
 	ending=true
