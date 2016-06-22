@@ -1,7 +1,7 @@
 #!/bin/bash
 mkdir -p ~/.kodi-openbox
 mkdir -p ~/.kodi-openbox/tmp
-$display=$(echo "${DISPLAY}" | tr ':' '_')
+display=$(echo "${DISPLAY}" | tr ':' '_')
 echo $$ > ~/.kodi-openbox/tmp/program-running.$display
 kpid=$(cat ~/.kodi-openbox/tmp/session-pid.$display)
 if [ -n "$kpid" ]
@@ -9,5 +9,8 @@ then
 	echo "closing kodi"
 	kill -3 $kpid
 fi
+echo "running program"
 eval "$@"
-exit $?
+eval_result=$?
+echo "finished running program"
+exit $eval_result
