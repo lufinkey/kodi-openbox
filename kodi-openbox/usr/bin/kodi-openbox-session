@@ -14,7 +14,7 @@ function onquit
 		return;
 	fi
 	ending=true
-	echo "Caught signal $1"	
+	echo "Caught signal $1"
 	if [ -a ~/.kodi-openbox/onkill ]
 	then
 		echo "running onkill script"
@@ -57,12 +57,13 @@ fi
 (
 	flock -x -n 200 || (echo "only one session of kodi-openbox can be run at a time on a given display" && exit -2)
 
+	set -m
+
 	trap 'onquit "SIGINT"' SIGINT
 	trap 'onquit "SIGQUIT"' SIGQUIT
 
 	openbox-session &
 	oppid=$!
-	bg
 	rm -f ~/.kodi-openbox/tmp/program-running.$display
 	if [ -a ~/.kodi-openbox/onstart ]
 	then
@@ -73,18 +74,21 @@ fi
 		/usr/lib/kodi/kodi.bin &
 		kpid=$!
 		echo "$kpid" > ~/.kodi-openbox/tmp/session-pid.$display
-		wait $kpid
+		fg
 		rm -f ~/.kodi-openbox/tmp/session-pid.$display
 
-		lpid=$(cat ~/.kodi-openbox/tmp/program-running.$display)
-		rm -f ~/.kodi-openbox/tmp/program-running.$display
-		if [ -n "$lpid" ]
+		if [ -a ~/.kodi-openbox/tmp/program-running.$display ]
 		then
-			while [ -e /proc/$lpid ]; do
-				sleep 1
-			done
-		else
-			break
+			lpid=$(cat ~/.kodi-openbox/tmp/program-running.$display)
+			rm -f ~/.kodi-openbox/tmp/program-running.$display
+			if [ -n "$lpid" ]
+			then
+				while [ -e /proc/$lpid ]; do
+					sleep 1
+				done
+			else
+				break
+			fi
 		fi
 	done
 	ending=true
