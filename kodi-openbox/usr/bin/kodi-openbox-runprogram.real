@@ -7,7 +7,7 @@ kpid=$(cat ~/.kodi-openbox/tmp/session-pid.$display)
 if [ -n "$kpid" ]
 then
 	echo "closing kodi"
-	kill -3 $kpid
+	kill -9 $kpid
 fi
 echo "running program"
 eval "$@"
