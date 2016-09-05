@@ -65,7 +65,7 @@ fi
 	openbox-session &
 	oppid=$!
 	rm -f ~/.kodi-openbox/tmp/program-running.$display
-	if [ -a ~/.kodi-openbox/onstart ]
+	if [ -f ~/.kodi-openbox/onstart ]
 	then
 		~/.kodi-openbox/onstart
 	fi
@@ -77,7 +77,7 @@ fi
 		fg
 		rm -f ~/.kodi-openbox/tmp/session-pid.$display
 
-		if [ -a ~/.kodi-openbox/tmp/program-running.$display ]
+		if [ -f ~/.kodi-openbox/tmp/program-running.$display ]
 		then
 			lpid=$(cat ~/.kodi-openbox/tmp/program-running.$display)
 			rm -f ~/.kodi-openbox/tmp/program-running.$display
@@ -101,7 +101,7 @@ fi
 rm -f ~/.kodi-openbox/tmp/program-running.$display
 rm -f ~/.kodi-openbox/tmp/displaylock.$display
 
-if [ -a ~/.kodi-openbox/onfinish ]
+if [ -f ~/.kodi-openbox/onfinish ]
 then
 	~/.kodi-openbox/onfinish
 fi
