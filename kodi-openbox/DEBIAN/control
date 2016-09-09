@@ -3,7 +3,7 @@ Version: 1.0.1
 Section: base
 Priority: optional
 Architecture: all
-Depends: openbox, kodi
+Depends: bash, openbox, kodi
 Maintainer: Luis Finke <luisfinke@gmail.com>
 Description: An xsession that runs Kodi Media Center on top of an Openbox session
 
