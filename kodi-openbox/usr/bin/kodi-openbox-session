@@ -71,8 +71,14 @@ fi
 	fi
 	while ps -p $oppid > /dev/null
 	do
-		/usr/lib/kodi/kodi.bin &
-		kpid=$!
+		if [ -f /usr/lib/kodi/kodi.bin ]
+		then
+			/usr/lib/kodi/kodi.bin &
+			kpid=$!
+		else
+			kodi &
+			kpid=$!
+		fi
 		echo "$kpid" > ~/.kodi-openbox/tmp/session-pid.$display
 		fg
 		rm -f ~/.kodi-openbox/tmp/session-pid.$display
