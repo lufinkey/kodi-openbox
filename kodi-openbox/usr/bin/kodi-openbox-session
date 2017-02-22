@@ -75,6 +75,10 @@ fi
 		then
 			/usr/lib/kodi/kodi.bin &
 			kpid=$!
+		elif [ -f /usr/lib/x86_64-linux-gnu/kodi/kodi.bin ]
+		then
+			/usr/lib/x86_64-linux-gnu/kodi/kodi.bin &
+			kpid=$!
 		else
 			kodi &
 			kpid=$!
