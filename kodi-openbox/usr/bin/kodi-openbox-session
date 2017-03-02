@@ -60,6 +60,7 @@ fi
 	set -m
 
 	trap 'onquit "SIGINT"' SIGINT
+	trap 'onquit "SIGTERM"' SIGTERM
 	trap 'onquit "SIGQUIT"' SIGQUIT
 
 	openbox-session &
