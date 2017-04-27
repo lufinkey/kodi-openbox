@@ -49,7 +49,7 @@ if [ ! -f ~/.kodi-openbox/onkill ]
 then
 	cat > ~/.kodi-openbox/onkill << EOF
 #!/bin/bash
-# Put some code here to run when a kodi-openbox session is sent a SIGINT or SIGQUIT
+# Put some code here to run when a kodi-openbox session is sent a SIGINT, SIGTERM, or SIGQUIT
 EOF
 	chmod +x ~/.kodi-openbox/onkill
 fi
