@@ -84,6 +84,10 @@ fi
 		then
 			/usr/lib/i386-linux-gnu/kodi/kodi.bin &
 			kpid=$!
+		elif [ -f /usr/lib/arm-linux-gnueabihf/kodi/kodi.bin ]
+		then
+			/usr/lib/arm-linux-gnueabihf/kodi/kodi.bin &
+			kpid=$!
 		else
 			kodi &
 			kpid=$!
