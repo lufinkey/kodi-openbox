@@ -10,7 +10,7 @@ The following commands will build and install a .deb package, for use on Debian 
 sudo dpkg -i kodi-openbox.deb
 ```
 
-If your system does not support deb package management, you can install the files manually with the following command in bash:
+If your system does not support deb package management, you will have to install the `openbox` dependency with whatever package manager your system has. Then run the following command in bash to install `kodi-openbox`:
 
 ```bash
 sudo cp -r -t / kodi-openbox/[!DEBIAN]*
