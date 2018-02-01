@@ -1,9 +1,30 @@
 # kodi-openbox
 An xsession that runs Kodi media center on top of an Openbox session
 
+## Install
+
+The following commands will build and install a .deb package, for use on Debian and Ubuntu systems:
+
+```bash
+./build.sh
+sudo dpkg -i kodi-openbox.deb
+```
+
+If your system does not support deb package management, you can install the files manually with the following command in bash:
+
+```bash
+sudo cp -r -t / kodi-openbox/[!DEBIAN]*
+```
+
+## Usage
+
+On most systems, you should be able to choose your X session at the login screen. Choose "Kodi Openbox" and log in to start the session.
+
+### Commands
+
 * **kodi-openbox-session** - runs a kodi-openbox session
 * **kodi-openbox-runprogram** - closes kodi and runs a command. Kodi will reopen when the command completes. Arguments are the command to run
-* **kodi-openbox-runprogram.real** - disowned process from kodi-openbox-runprogram
+* **kodi-openbox-runprogram.real** - disowned process from kodi-openbox-runprogram. You should not run this manually
 
 ### Openbox background
 To set the background color of your openbox session, add the following command to *~/.config/openbox/autostart.sh*
