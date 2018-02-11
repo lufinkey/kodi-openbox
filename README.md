@@ -3,14 +3,14 @@ An xsession that runs Kodi media center on top of an Openbox session
 
 ## Install
 
-The following commands will build and install a .deb package, for use on Debian and Ubuntu systems:
+**Debian/Ubuntu distros**
 
 ```bash
 ./build.sh
 sudo dpkg -i kodi-openbox.deb
 ```
 
-If your system does not support deb package management, you will have to install the `openbox` dependency with whatever package manager your system has. Then run the following command in bash to install `kodi-openbox`:
+**Other Linux distros**
 
 ```bash
 sudo cp -r -t / kodi-openbox/[!DEBIAN]*
