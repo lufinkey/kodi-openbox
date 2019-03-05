@@ -24,7 +24,6 @@ On most systems, you should be able to choose your X session at the login screen
 
 * **kodi-openbox-session** - runs a kodi-openbox session
 * **kodi-openbox-runprogram** - closes kodi and runs a command. Kodi will reopen when the command completes. Arguments are the command to run
-* **kodi-openbox-runprogram.real** - disowned process from kodi-openbox-runprogram. You should not run this manually
 
 ### Openbox background
 To set the background color of your openbox session, add the following command to *~/.config/openbox/autostart.sh*
