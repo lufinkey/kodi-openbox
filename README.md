@@ -12,6 +12,8 @@ sudo dpkg -i kodi-openbox.deb
 
 **Other Linux distros**
 
+Note, this command manually copies all files to their intended places in the filesystem, meaning they will need to be uninstalled manually.
+
 ```bash
 sudo cp -r -t / kodi-openbox/[!DEBIAN]*
 ```
