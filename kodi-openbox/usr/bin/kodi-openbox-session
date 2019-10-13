@@ -72,7 +72,12 @@ fi
 	fi
 	while ps -p $oppid > /dev/null
 	do
-		if [ -f /usr/lib/kodi/kodi.bin ]
+		flatpak info tv.kodi.Kodi > /dev/null 2>&1
+		if [ $? -eq 0 ]
+			flatpak run tv.kodi.Kodi &
+			kpid=$!
+		then
+		elif [ -f /usr/lib/kodi/kodi.bin ]
 		then
 			/usr/lib/kodi/kodi.bin &
 			kpid=$!
