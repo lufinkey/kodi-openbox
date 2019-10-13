@@ -72,7 +72,7 @@ fi
 	fi
 	while ps -p $oppid > /dev/null
 	do
-		if [ command -v flatpak > /dev/null 2>&1 ] && [ flatpak info tv.kodi.Kodi > /dev/null 2>&1 ]
+		if command -v flatpak > /dev/null 2>&1 && flatpak info tv.kodi.Kodi > /dev/null 2>&1
 		then
 			flatpak run tv.kodi.Kodi &
 			kpid=$!
