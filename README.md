@@ -10,6 +10,17 @@ An xsession that runs Kodi media center on top of an Openbox session
 sudo dpkg -i kodi-openbox.deb
 ```
 
+**Arch distros**
+
+```bash
+sudo pacman -S fakeroot dpkg debtap
+./build.sh
+debtap kodi-openbox.deb
+```
+
+This will return an Arch package that can be installed with your favorite package manager, (Pacman, Octopi, Pamac, etc).
+
+
 **Other Linux distros**
 
 Note, this command manually copies all files to their intended places in the filesystem, meaning they will need to be uninstalled manually.
